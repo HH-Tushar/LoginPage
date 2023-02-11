@@ -13,8 +13,19 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("Home"),
+      leading: IconButton(onPressed: (){setState(() {
+        Navigator.pop(context);
+      });},
+      icon: Icon(Icons.arrow_back_ios)),),
       body: Center(
-        child: Text("Welcome to home page $name",style:TextStyle(fontSize: 20),),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Welcome to home page",style:TextStyle(fontSize: 20),),
+            Text("$name",style:TextStyle(fontSize: 20),),
+
+          ],
+        ),
       ),
     );
   }

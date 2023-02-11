@@ -9,12 +9,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String? username;
-  String? password1;
+  String? userEmail;
+  String? userPassword;
   String? password2;
-  final namecontroller = TextEditingController();
-  final passcontroller1 = TextEditingController();
-  final passcontroller2 = TextEditingController();
+  final userEmailController = TextEditingController();
+  final userPasswordController = TextEditingController();
+  //final passcontroller2 = TextEditingController();
+ bool isObsecure=true;
   final mykey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -29,29 +30,39 @@ class _LoginPageState extends State<LoginPage> {
         child: Form(
           key: mykey,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
+
               SizedBox(
                 height: 250,
                 child: Image.asset("assets/pic/login.png",fit:BoxFit.cover),
               ),
+             // const SizedBox(height: 10,),
+              const Text("Welcome Back",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color: Colors.grey),),
               const SizedBox(height: 20,),
+
               TextFormField(
-                controller: namecontroller,
+                controller: userEmailController,
+                textInputAction: TextInputAction.next,
+                keyboardType:TextInputType.emailAddress,
                 decoration: const InputDecoration(
-                  prefixIcon: (Icon(Icons.person)), //icon inside box
+                  prefixIcon: (Icon(Icons.email)), //icon inside box
                   // icon:(Icon(Icons.person)),//icon outside before box
-                  hintText: "Enter your Full name",
-                  labelText: "User name",
+                  hintText: "Enter your Email",
+                  labelText: "User Email",
                   border: OutlineInputBorder(),
+
                 ),
-                onChanged: (value) => setState(() => username = value),
-                textInputAction: TextInputAction.done,
+                onChanged: (value) => setState(() => userEmail = value),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "This field must be filled up";
                     }
-                    if (value.length<4) {
+                    else if (value.length<4) {
                       return "Please enter a valid User name";
+                    }
+                    else if(!value.contains("@")){
+                      return "Invalid User email";
                     }
                   },
               ),
@@ -59,16 +70,24 @@ class _LoginPageState extends State<LoginPage> {
                 height: 15,
               ),
               TextFormField(
-                controller: passcontroller1,
-                decoration: const InputDecoration(
+                controller: userPasswordController,
+                obscureText: isObsecure,
+                decoration:  InputDecoration(
                   prefixIcon: (Icon(Icons.lock)), //icon inside box
                   // icon:(Icon(Icons.lock)),//icon outside before box
                   hintText: "Enter your Password",
                   labelText: "Password",
                   border: OutlineInputBorder(),
+                  suffixIcon: IconButton(onPressed: (){
+                    setState(() {
+                      isObsecure=!isObsecure;
+                    });
+
+                  }, icon: Icon(isObsecure==true?Icons.visibility:Icons.visibility_off_outlined))
                 ),
-                onChanged: (value) => setState(() => password1 = value),
-                textInputAction: TextInputAction.done,
+
+                onChanged: (value) => setState(() => userPassword = value),
+                textInputAction: TextInputAction.next,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Please enter a valid Password";
@@ -113,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => HomePage(
-                                      name: namecontroller.text,
+                                      name: userEmailController.text,
                                     )));
                       }
                     },
